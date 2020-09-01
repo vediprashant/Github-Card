@@ -1,0 +1,14 @@
+.card {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.follow1 {
+  float: left;
+  padding: 0 10px;
+}
+.follow2 {
+  float: right;
+  padding: 0 10px;
+}
