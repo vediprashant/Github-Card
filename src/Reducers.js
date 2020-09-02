@@ -1,12 +1,15 @@
+import { combineReducers } from "redux";
 import actions from "./Actions";
 
 const initialState = {
   loggedIn: false,
   userData: {},
   userName: null,
+  isLoading: false,
+  isError: false,
 };
 
-function reducer(state = initialState, action) {
+function logger(state = initialState, action) {
   switch (action.type) {
     case actions.LOGGED_IN:
       return {
@@ -15,6 +18,7 @@ function reducer(state = initialState, action) {
       };
     case actions.LOGGED_OUT:
       return {
+        ...state,
         loggedIn: false,
         userData: {},
         userName: null,
@@ -29,5 +33,26 @@ function reducer(state = initialState, action) {
       return state;
   }
 }
-
-export default reducer;
+function loader(state = initialState, action) {
+  switch (action.type) {
+    case actions.LOADING:
+      return {
+        ...state,
+        isLoading: !state.isLoading,
+      };
+    case actions.SET_ERROR:
+      return {
+        ...state,
+        isError: true,
+      };
+    case actions.UNSET_ERROR:
+      return {
+        ...state,
+        isError: false,
+      };
+    default:
+      return state;
+  }
+}
+const rootReducer = combineReducers({ logger, loader });
+export default rootReducer;

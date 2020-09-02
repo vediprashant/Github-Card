@@ -38,9 +38,9 @@ const Header = (props) => {
   );
 };
 const mapStateToProps = (state) => ({
-  loggedIn: state.loggedIn,
-  userData: state.userData,
-  userName: state.userName,
+  loggedIn: state.logger.loggedIn,
+  userData: state.logger.userData,
+  userName: state.logger.userName,
 });
 
 Header.propTypes = {

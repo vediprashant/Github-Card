@@ -8,6 +8,7 @@ import "./login.css";
 import validateUser from "../utils/validateUser";
 import handleTokens from "../utils/handleTokens";
 import { Redirect } from "react-router-dom";
+import validatingUser from "../ActionCreator";
 
 class Login extends React.Component {
   constructor(props) {
@@ -15,8 +16,6 @@ class Login extends React.Component {
     this.state = {
       username: "",
       token: "",
-      iserror: false,
-      isloading: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleTokenChange = this.handleTokenChange.bind(this);
@@ -29,27 +28,30 @@ class Login extends React.Component {
     this.setState({ token: event.target.value });
   }
   async handleSubmit(event) {
-    this.setState({ isloading: true });
+    // this.setState({ isloading: true });
     event.preventDefault();
-    const jsonData = await validateUser(this.state.token);
-    if (jsonData.message || jsonData.login !== this.state.username) {
-      this.setState({ iserror: true, isloading: false });
-    } else {
-      this.setState({ iserror: false, isloading: false });
-      handleTokens.addToken("token", this.state.token);
-      handleTokens.addToken("user", this.state.username);
-      this.props.dispatch({
-        type: "SET_DATA",
-        payload: {
-          userData: jsonData,
-          userName: this.state.username,
-        },
-      });
-      this.props.dispatch({
-        type: "LOGGED_IN",
-      });
-      this.props.history.push("/");
-    }
+    console.log(this.props, this.state.token, this.state.username);
+
+    this.props.validatingUser(this.state.token, this.state.username);
+    // const jsonData = await validateUser(this.state.token);
+    // if (jsonData.message || jsonData.login !== this.state.username) {
+    //   this.setState({ iserror: true, isloading: false });
+    // } else {
+    //   this.setState({ iserror: false, isloading: false });
+    //   handleTokens.addToken("token", this.state.token);
+    //   handleTokens.addToken("user", this.state.username);
+    //   this.props.dispatch({
+    //     type: "SET_DATA",
+    //     payload: {
+    //       userData: jsonData,
+    //       userName: this.state.username,
+    //     },
+    //   });
+    //   this.props.dispatch({
+    //     type: "LOGGED_IN",
+    //   });
+    //   this.props.history.push("/");
+    // }
   }
   render() {
     return (
@@ -86,7 +88,7 @@ class Login extends React.Component {
                   size="large"
                   onClick={this.handleSubmit}
                 >
-                  {this.state.isloading ? (
+                  {this.props.isLoading ? (
                     <div className="ui active centered inline loader"></div>
                   ) : (
                     "Login"
@@ -94,7 +96,7 @@ class Login extends React.Component {
                 </Button>
               </Segment>
             </Form>
-            {this.state.iserror ? (
+            {this.props.isError ? (
               <div className="error">Please Provide Valid Credentials</div>
             ) : (
               ""
@@ -106,10 +108,20 @@ class Login extends React.Component {
   }
 }
 const mapStateToProps = (state) => ({
-  loggedIn: state.loggedIn,
-  userData: state.userData,
-  userName: state.userName,
+  loggedIn: state.logger.loggedIn,
+  userData: state.logger.userData,
+  userName: state.logger.userName,
+  isLoading: state.loader.isLoading,
+  isError: state.loader.isError,
 });
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    validatingUser: (token, username) => {
+      dispatch(validatingUser(token, username));
+    },
+  };
+};
 
 Login.propTypes = {
   history: PropTypes.shape({
@@ -117,4 +129,4 @@ Login.propTypes = {
   }).isRequired,
 };
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

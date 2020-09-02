@@ -5,7 +5,11 @@ import PropTypes from "prop-types";
 import "./cardLayout.css";
 import "../app.css";
 
+/**
+ * Component to show the card having details of user
+ */
 const CardLayout = (props) => {
+  /* Destructuring the userData received in props */
   const {
     avatar_url: avatar,
     login: userName,
@@ -18,6 +22,7 @@ const CardLayout = (props) => {
     email,
   } = props.userData;
   return (
+    /* Component that will be rendered */
     <div className="card">
       <Card>
         <Image src={avatar} wrapped ui={false} />
@@ -59,6 +64,7 @@ const CardLayout = (props) => {
   );
 };
 CardLayout.propTypes = {
+  /* userData will contain all the details about a given user */
   userData: PropTypes.object,
 };
 

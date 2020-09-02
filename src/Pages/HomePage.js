@@ -34,9 +34,9 @@ const HomePage = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  userData: state.userData,
-  userName: state.userName,
-  loggedIn: state.loggedIn,
+  userData: state.logger.userData,
+  userName: state.logger.userName,
+  loggedIn: state.logger.loggedIn,
 });
 
 HomePage.propTypes = {
