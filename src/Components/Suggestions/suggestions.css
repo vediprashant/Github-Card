@@ -1,3 +1,7 @@
 .suggestion {
   width: fit-content;
 }
+
+.header a {
+  float: right;
+}

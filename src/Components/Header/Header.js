@@ -4,43 +4,46 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import handleTokens from "../../utils/handleTokens";
+import actions from "../../Actions";
+import KEYS from "../../Constants/keyConstants";
+import ROUTES from "../../Constants/pathConstants";
 import "./header.css";
 import "../app.css";
 
 const Header = (props) => {
   useEffect(() => {
-    if (handleTokens.getToken("token")) {
-      props.dispatch({ type: "LOGGED_IN" });
+    if (handleTokens.getToken(KEYS.TOKEN)) {
+      props.dispatch({ type: actions.LOGGED_IN });
     }
   }, []);
   const clickHanlder = () => {
-    handleTokens.removeToken("token");
-    handleTokens.removeToken("user");
+    handleTokens.removeToken(KEYS.TOKEN);
+    handleTokens.removeToken(KEYS.USER);
     props.dispatch({
-      type: "LOGGED_OUT",
+      type: actions.LOGGED_OUT,
     });
-    props.history.push("/login");
+    props.history.push(ROUTES.LOGIN_ROUTE);
   };
   return (
     <nav className="navbar">
-      <NavLink className="menu" to="/">
-        Github-Card
-      </NavLink>
-      <NavLink className="menu" to="/card">
-        Card
-      </NavLink>
       {props.loggedIn ? (
-        <button className="ui primary button logout" onClick={clickHanlder}>
-          Log Out
-        </button>
+        <div>
+          <NavLink className="menu" to={ROUTES.HOME_ROUTE}>
+            Github-Card
+          </NavLink>
+          <NavLink className="menu" to={ROUTES.CARD_ROUTE}>
+            Card
+          </NavLink>
+          <button className="ui primary button logout" onClick={clickHanlder}>
+            Log Out
+          </button>
+        </div>
       ) : null}
     </nav>
   );
 };
 const mapStateToProps = (state) => ({
-  loggedIn: state.logger.loggedIn,
-  userData: state.logger.userData,
-  userName: state.logger.userName,
+  loggedIn: state.currentUser.loggedIn,
 });
 
 Header.propTypes = {

@@ -19,7 +19,6 @@ export default class Suggestions extends Component {
     };
     this.removeHandler = this.removeHandler.bind(this);
     this.followHandler = this.followHandler.bind(this);
-    // this.clickHandler = this.clickHandler.bind(this);
   }
   extract = ({ login, avatar_url, html_url }) => {
     return { login, avatar_url, html_url };
@@ -34,9 +33,8 @@ export default class Suggestions extends Component {
   };
   async removeHandler(login) {
     const randomUser = await getRandomUser();
-    console.log(randomUser);
     const newUsers = this.state.users.map((user) => {
-      if (user.login == login) {
+      if (user.login === login) {
         return this.extract(randomUser[0]);
       }
       return user;

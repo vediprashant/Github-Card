@@ -1,12 +1,11 @@
 import React from "react";
 import { Button, Form, Grid, Header, Segment } from "semantic-ui-react";
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 import "../Components/app.css";
 import "./login.css";
-import validateUser from "../utils/validateUser";
-import handleTokens from "../utils/handleTokens";
 import { Redirect } from "react-router-dom";
 import validatingUser from "../ActionCreator";
 
@@ -28,39 +27,17 @@ class Login extends React.Component {
     this.setState({ token: event.target.value });
   }
   async handleSubmit(event) {
-    // this.setState({ isloading: true });
     event.preventDefault();
-    console.log(this.props, this.state.token, this.state.username);
-
-    this.props.validatingUser(this.state.token, this.state.username);
-    // const jsonData = await validateUser(this.state.token);
-    // if (jsonData.message || jsonData.login !== this.state.username) {
-    //   this.setState({ iserror: true, isloading: false });
-    // } else {
-    //   this.setState({ iserror: false, isloading: false });
-    //   handleTokens.addToken("token", this.state.token);
-    //   handleTokens.addToken("user", this.state.username);
-    //   this.props.dispatch({
-    //     type: "SET_DATA",
-    //     payload: {
-    //       userData: jsonData,
-    //       userName: this.state.username,
-    //     },
-    //   });
-    //   this.props.dispatch({
-    //     type: "LOGGED_IN",
-    //   });
-    //   this.props.history.push("/");
-    // }
+    this.props.validate(this.state.token, this.state.username);
   }
   render() {
     return (
       <div>
-        {handleTokens.getToken("token") ? <Redirect to="/" /> : null}
+        {this.props.loggedIn ? <Redirect to="/" /> : null}
         <div className="logo">
           <i aria-hidden="true" className="github massive icon"></i>
         </div>
-        <Grid textAlign="center" style={{ height: "100vh" }}>
+        <Grid textAlign="center">
           <Grid.Column style={{ maxWidth: 450 }}>
             <Header as="h2" color="grey" textAlign="center">
               Log-in to your account
@@ -89,7 +66,7 @@ class Login extends React.Component {
                   onClick={this.handleSubmit}
                 >
                   {this.props.isLoading ? (
-                    <div className="ui active centered inline loader"></div>
+                    <div className="ui active centered inline tiny inverted loader"></div>
                   ) : (
                     "Login"
                   )}
@@ -98,9 +75,9 @@ class Login extends React.Component {
             </Form>
             {this.props.isError ? (
               <div className="error">Please Provide Valid Credentials</div>
-            ) : (
-              ""
-            )}
+            ) : this.props.apiError ? (
+              <div className="error">Internal Issue...Please try again</div>
+            ) : null}
           </Grid.Column>
         </Grid>
       </div>
@@ -108,19 +85,17 @@ class Login extends React.Component {
   }
 }
 const mapStateToProps = (state) => ({
-  loggedIn: state.logger.loggedIn,
-  userData: state.logger.userData,
-  userName: state.logger.userName,
-  isLoading: state.loader.isLoading,
-  isError: state.loader.isError,
+  loggedIn: state.currentUser.loggedIn,
+  isLoading: state.fetchUser.isLoading,
+  isError: state.fetchUser.isError,
+  apiError: state.fetchUser.apiError,
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    validatingUser: (token, username) => {
-      dispatch(validatingUser(token, username));
-    },
-  };
+  return bindActionCreators(
+    { validate: (token, userName) => validatingUser(token, userName) },
+    dispatch
+  );
 };
 
 Login.propTypes = {

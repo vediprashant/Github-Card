@@ -4,7 +4,7 @@ export default function Suggestion(props) {
   return (
     <div className="event">
       <div className="label">
-        <img src={props.avatar_url} />
+        <img src={props.avatar_url} alt="avatar" />
       </div>
       <div className="content">
         <div className="date">{props.login}</div>

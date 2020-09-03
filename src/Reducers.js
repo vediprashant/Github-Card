@@ -4,12 +4,12 @@ import actions from "./Actions";
 const initialState = {
   loggedIn: false,
   userData: {},
-  userName: null,
   isLoading: false,
   isError: false,
+  apiError: false,
 };
 
-function logger(state = initialState, action) {
+function currentUser(state = initialState, action) {
   switch (action.type) {
     case actions.LOGGED_IN:
       return {
@@ -21,19 +21,17 @@ function logger(state = initialState, action) {
         ...state,
         loggedIn: false,
         userData: {},
-        userName: null,
       };
     case actions.SET_DATA:
       return {
         ...state,
         userData: action.payload.userData,
-        userName: action.payload.userName,
       };
     default:
       return state;
   }
 }
-function loader(state = initialState, action) {
+function fetchUser(state = initialState, action) {
   switch (action.type) {
     case actions.LOADING:
       return {
@@ -50,9 +48,19 @@ function loader(state = initialState, action) {
         ...state,
         isError: false,
       };
+    case actions.SET_API_ERROR:
+      return {
+        ...state,
+        apiError: true,
+      };
+    case actions.UNSET_API_ERROR:
+      return {
+        ...state,
+        apiError: false,
+      };
     default:
       return state;
   }
 }
-const rootReducer = combineReducers({ logger, loader });
+const rootReducer = combineReducers({ currentUser, fetchUser });
 export default rootReducer;

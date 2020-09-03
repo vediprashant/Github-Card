@@ -6,9 +6,13 @@ import "./notFoundPage.css";
 
 const NotFoundPage = () => (
   <div className="notFound">
-    <span>404</span>
-    <i className="fas fa-ghost"></i>
-    <Link to="/">Go Home</Link>
+    <div className="code">
+      <span>Oops! 404</span>
+      <i className="fas fa-ghost fa-spin fa-10x fa-fw ghost"></i>
+    </div>
+    <div className="redirect">
+      <Link to="/">Go Home</Link>
+    </div>
   </div>
 );
 

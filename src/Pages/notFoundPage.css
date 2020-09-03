@@ -1,6 +1,22 @@
+.code {
+  display: flex;
+  justify-content: center;
+  margin: 200px auto 0 auto;
+}
+.code span {
+  font-size: 80px;
+  margin-top: 40px;
+  color: #c01f62af;
+}
 .notFound {
   display: flex;
   justify-content: center;
+}
+.ghost {
+  color: rgb(87, 84, 84);
+}
+.redirect {
+  position: absolute;
+  bottom: 70px;
   font-size: 80px;
-  margin: 250px auto;
 }
