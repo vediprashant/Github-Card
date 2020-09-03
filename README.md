@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+You can view the running ap at https://cardhub.netlify.app/login
+
 ## Setup Project
 
 Run the command npm install to install all the dependancies
